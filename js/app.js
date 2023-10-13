@@ -30,7 +30,7 @@ function buscarCarta () {
     busqueda = busqueda.trim()
 
     if (busqueda === '') {
-      alert('Campo vacío');
+      alert('El campo está vacío, prueba ingresando un nombre');
       continue
     }
 
