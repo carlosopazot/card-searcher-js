@@ -16,6 +16,7 @@ function validateLogin(e) {
     wrapper.innerHTML = `
     <div class="alert alert-${type} alert-dismissible border-0 shadow-sm" role="alert">
       <h5 class="mb-0">${message}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>`
     loginForm.appendChild(wrapper)
   }
