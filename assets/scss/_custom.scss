@@ -1,0 +1,27 @@
+.icon-alert {
+  font-size: 3rem;
+}
+
+.img-avatar {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.navbar-brand-logo {
+  width: 40px;
+  object-fit: contain;
+}
+
+.messages-container {
+  position: fixed; 
+  top: 1rem; 
+  right: 1rem; 
+  z-index: 1000;
+}
+
+.titles-content {
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

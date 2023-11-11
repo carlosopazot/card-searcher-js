@@ -1,89 +1,64 @@
-const cards = [
-  {
-    name: 'Mana Vault',
-    price: 34.99,
-    image: 'https://www.paytowin.cl/cdn/shop/products/4887d331-b7e0-5c8f-9075-3dddae6c9198_800x.jpg?v=1663900710',
-  },
-  {
-    name: 'Mana Crypt',
-    price: 34.99,
-    image: 'https://www.oasisgames.cl/cdn/shop/products/c433fcb1-0122-53f9-9e40-716a81872d42.jpg?v=1636158254',
-  },
-  {
-    name: 'Mana Drain',
-    price: 34.99,
-    image: 'https://www.paytowin.cl/cdn/shop/products/53d098d0-a58c-5f64-a035-0c0081da37fb_800x.jpg?v=1663891633',
-  },
-  {
-    name: 'Counterspell',
-    price: 34.99,
-    image: 'https://www.paytowin.cl/cdn/shop/products/611e5a1c-13f9-5a8e-b7ab-c42d4444bbf2_37ec8a8a-24d0-4f21-8d5e-63bdcb8aca8a_800x.jpg?v=1663889022',
-  },
-]
-
-let searchForm = document.getElementById('searchForm');
+const searchForm = document.querySelector('#searchForm');
+const searchContent = document.querySelector('#searchInput')
 searchForm.addEventListener('submit', validateForm);
+const resultados = document.querySelector('#results')
 const collectionCards = JSON.parse(localStorage.getItem('collection')) || [];
+const messages = document.querySelector('#messages')
 
-function validateForm(e){
-
+function validateForm(e) {
   e.preventDefault();
-
-  let searchContent = document.getElementById('searchInput').value
-  const resultadoContainer = document.getElementById('results')
-  resultadoContainer.innerHTML = ``
-  
-  if (searchContent.trim() === '') {
-    resultadoContainer.innerHTML = `
-      <div class="col-12 col-md-8">
-        <div class="alert alert-warning alert-dismissible border-0 shadow-sm" role="alert">
-          <h5 class="mb-0">Debes ingresar un nombre</h5>
-        </div>
-      </div>
-    `
-    return
+  const name = searchContent.value.trim()
+  if (!name) {
+    showToast('Por favor, ingresa un nombre de carta.', 'warning');
+    return;
   }
+  fetch(`https://api.scryfall.com/cards/search?q=${name}`)
+    .then(res => {
+      if(!res.ok) {
+        throw new Error('Error al obtener los datos')
+      } 
+      return res.json()
+    })
+    .then(data => {
+      resultados.innerHTML = '';
+      
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        totalResults(data)
+        data.data.forEach(card => {
 
-  const results = cards.filter(card => card.name.toLowerCase().includes(searchContent))
+          const cardName = card.name;
+          const cardImage = card.image_uris.normal
+          const cardPrice = card.prices.usd;
+          const cardSet = card.set_name;
+          // const cardColor = card.color_identity;
 
-  if (results.length > 0) {
-    results.map(result => {
-      const isInCollection = collectionCards.some(
-        (card) => card.name === result.name
-      );
-      resultadoContainer.innerHTML += `
-        <div class="col-6 col-md-3">
-          <div class="card shadow-sm border-0 result-item mb-4">
-            <img src="${result.image}" alt="" class="img-fluid rounded-top">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <h4 class="text-muted">${result.name}</h4>
-                  <h3>$${result.price}</h3>
+          const isInCollection = collectionCards.some(
+            (card) => card.name === cardName
+          );
+          resultados.innerHTML += `
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card border-0 shadow-sm mb-3">
+                <img src=${cardImage} class="img-fluid rounded-top"></img>
+                <div class="card-body">
+                  <h5 class="titles-content">${cardName}</h5>
+                  <h4 class="text-muted">$${cardPrice}</h4>
+                  <h6 class="titles-content text-muted">${cardSet}</h6>
                   ${
-                    isInCollection
-                      ? '<h5><span class="badge rounded-pill bg-secondary"><i class="bi bi-check"></i> En colección</span></h5>'
-                      : `<button onclick="addCard(this, '${result.name}', '${result.image}', ${result.price})" class="btn btn-outline-primary w-100">Agregar</button>`
-                  }
+                      isInCollection
+                        ? '<h4><span class="badge rounded-pill bg-secondary"><i class="bi bi-check"></i> En colección</span></h4>'
+                        : `<button onclick="addCard(this, '${cardName}', '${cardImage}', ${cardPrice})" class="btn btn-lg btn-outline-primary w-100 titles-content"><i class="bi bi-plus-lg"></i> Agregar a colección</button>`
+                    }
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      `
-    }
-  )} else {
-    resultadoContainer.innerHTML = `
-    <div class="col-12 col-md-8">
-      <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body text-center">
-        <i class="bi bi-question-circle-fill icon-alert"></i>
-          <h4 class="text-muted">No encontramos la carta que buscas</h4>
-        </div>
-      </div>
-    </div>
-    `
-  }
+          `;
+        })
+      } else {
+        console.log('No se encontraron cartas');
+      }
+    })
+    .catch(error => console.log('Hubo un error', error) )
 }
 
 function addCard(button, nameCard, imageCard, priceCard) {
@@ -97,4 +72,14 @@ function addCard(button, nameCard, imageCard, priceCard) {
 
   button.disabled = true;
   button.textContent = "Agregado";
+  showToast('Carta agregada a la colección', 'success');
+}
+
+function totalResults(data) {
+  const totalResultsContainer = document. getElementById('totalResults');
+  if(data && data.data && data.data.length > 0) {
+    totalResultsContainer.innerHTML = `
+      <h4 class="mb-5">Total de coincidencias: ${data.data.length}</h4>
+    `
+  }
 }

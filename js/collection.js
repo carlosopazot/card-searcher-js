@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const cards = collectionCards ? JSON.parse(collectionCards) : [];
 
   const cardList = document.getElementById('collection');
+  const totalCardsElement = document.getElementById('total-cards');
+  
   cardList.innerHTML = '';
 
   function removeCard(index) {
@@ -18,13 +20,14 @@ document.addEventListener('DOMContentLoaded', function () {
       cardElement.classList.add('col-6', 'col-md-3');
       cardElement.innerHTML = `
         <div class="card shadow-sm border-0 result-item mb-4">
-          <img src="${card.image}" alt="" class="img-fluid rounded-top">
+          <img src="${card.image}" alt=${card.name} class="img-fluid rounded-top">
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
                 <h4 class="text-muted">${card.name}</h4>
                 <h3>$${card.price}</h3>
-                <button class="btn btn-outline-secondary w-100" data-index="${index}">Eliminar</button>
+                <h5 class="text-muted">${card.set}</h5>
+                <button class="btn btn-lg btn-outline-secondary w-100" data-index="${index}"><i class="bi bi-dash-lg"></i> Eliminar</button>
               </div>
             </div>
           </div>
@@ -57,6 +60,25 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `;
     }
+    const totalPrice = cards.reduce((total, card) => total + card.price, 0);
+    totalCardsElement.innerHTML = `
+      <div class="col-md-3 col-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="text-muted" id="total-cards">Total de cartas</h5>
+            <h3 class="mb-0">${cards.length}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="text-muted" id="total-cards">Precio total</h5>
+            <h3 class="mb-0">$${totalPrice.toFixed(2)}</h3>
+          </div>
+        </div>
+      </div>
+    `;
   }
   renderCollection();
 });
