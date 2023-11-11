@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (cards.length === 0) {
       cardList.innerHTML = `
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-8">
           <div class="card shadow-sm border-0 result-item mb-4">
             <div class="card-body">
               <div class="row">
@@ -62,15 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     const totalPrice = cards.reduce((total, card) => total + card.price, 0);
     totalCardsElement.innerHTML = `
-      <div class="col-md-3 col-6">
+      <div class="col-md-4 col-6">
         <div class="card shadow-sm border-0">
           <div class="card-body text-center">
-            <h5 class="text-muted" id="total-cards">Total de cartas</h5>
+            <h5 class="text-muted" id="total-cards">Total cartas</h5>
             <h3 class="mb-0">${cards.length}</h3>
           </div>
         </div>
       </div>
-      <div class="col-md-3 col-6">
+      <div class="col-md-4 col-6">
         <div class="card shadow-sm border-0">
           <div class="card-body text-center">
             <h5 class="text-muted" id="total-cards">Precio total</h5>

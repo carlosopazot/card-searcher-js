@@ -11884,4 +11884,14 @@ textarea.form-control-lg {
   text-overflow: ellipsis;
 }
 
+.login-img {
+  width: 100px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.form-control::placeholder {
+  opacity: 0.5;
+}
+
 /*# sourceMappingURL=app.css.map */

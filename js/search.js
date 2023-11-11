@@ -8,7 +8,8 @@ const messages = document.querySelector('#messages')
 function validateForm(e) {
   e.preventDefault();
   const name = searchContent.value.trim()
-  if (!name) {
+  resultados.innerHTML = '';
+  if (name === '') {
     showToast('Por favor, ingresa un nombre de carta.', 'warning');
     return;
   }
@@ -20,7 +21,6 @@ function validateForm(e) {
       return res.json()
     })
     .then(data => {
-      resultados.innerHTML = '';
       
       if (data && data.data && data.data.length > 0) {
         console.log(data);
@@ -37,7 +37,7 @@ function validateForm(e) {
             (card) => card.name === cardName
           );
           resultados.innerHTML += `
-            <div class="col-6 col-md-4 col-lg-3">
+            <div class="col-6 col-md-4 col-xl-3">
               <div class="card border-0 shadow-sm mb-3">
                 <img src=${cardImage} class="img-fluid rounded-top"></img>
                 <div class="card-body">
@@ -58,7 +58,9 @@ function validateForm(e) {
         console.log('No se encontraron cartas');
       }
     })
-    .catch(error => console.log('Hubo un error', error) )
+    .catch(error => {
+      console.log('Hubo un error', error)
+    })
 }
 
 function addCard(button, nameCard, imageCard, priceCard) {
