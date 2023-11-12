@@ -17,17 +17,17 @@ document.addEventListener('DOMContentLoaded', function () {
     cardList.innerHTML = '';
     cards.forEach((card, index) => {
       const cardElement = document.createElement('div');
-      cardElement.classList.add('col-6', 'col-md-3');
+      cardElement.setAttribute('class', 'col-6 col-md-4 col-xl-3');
       cardElement.innerHTML = `
         <div class="card shadow-sm border-0 result-item mb-4">
           <img src="${card.image}" alt=${card.name} class="img-fluid rounded-top">
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
-                <h4 class="text-muted">${card.name}</h4>
-                <h3>$${card.price}</h3>
-                <h5 class="text-muted">${card.set}</h5>
-                <button class="btn btn-lg btn-outline-secondary w-100" data-index="${index}"><i class="bi bi-dash-lg"></i> Eliminar</button>
+              <h5 class="titles-content">${card.name}</h5>
+              <h6 class="titles-content text-muted">${card.set}</h6>
+              <h4 class="text-muted">$${card.price}</h4>
+                <button class="btn btn-lg btn-outline-secondary w-100" data-index="${index}"> Eliminar</button>
               </div>
             </div>
           </div>

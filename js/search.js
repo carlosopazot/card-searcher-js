@@ -42,12 +42,12 @@ function validateForm(e) {
                 <img src=${cardImage} class="img-fluid rounded-top"></img>
                 <div class="card-body">
                   <h5 class="titles-content">${cardName}</h5>
-                  <h4 class="text-muted">$${cardPrice}</h4>
                   <h6 class="titles-content text-muted">${cardSet}</h6>
+                  <h4 class="text-muted">$${cardPrice}</h4>
                   ${
                       isInCollection
                         ? '<h4><span class="badge rounded-pill bg-secondary"><i class="bi bi-check"></i> En colección</span></h4>'
-                        : `<button onclick="addCard(this, '${cardName}', '${cardImage}', ${cardPrice})" class="btn btn-lg btn-outline-primary w-100 titles-content"><i class="bi bi-plus-lg"></i> Agregar a colección</button>`
+                        : `<button onclick="addCard(this, '${cardName}', '${cardImage}', ${cardPrice}, '${cardSet}')" class="btn btn-lg btn-outline-primary w-100 titles-content"><i class="bi bi-plus-lg"></i> Agregar a colección</button>`
                     }
                 </div>
               </div>
@@ -63,13 +63,13 @@ function validateForm(e) {
     })
 }
 
-function addCard(button, nameCard, imageCard, priceCard) {
+function addCard(button, nameCard, imageCard, priceCard, cardSet) {
 
   if (button.disabled) {
     return;
   }
 
-  collectionCards.push({name: nameCard, image: imageCard, price: priceCard })
+  collectionCards.push({name: nameCard, image: imageCard, price: priceCard, set: cardSet })
   localStorage.setItem('collection', JSON.stringify(collectionCards))
 
   button.disabled = true;
